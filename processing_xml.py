@@ -36,12 +36,12 @@ import pprint
 import re
 import codecs
 import json
+from update_functions import *
 
 CREATED = ["version", "changeset", "timestamp", "user", "uid"]
 lower = re.compile(r'^([a-z]|_)*$')
 lower_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*$')
 problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
-
 
 def shape_element(element):
 	node = {}
@@ -101,6 +101,19 @@ def shape_element(element):
 					if attr not in CREATED + ['lat', 'lon']:
 						node[attr] = subtag.attrib[attr]
 
+			### Performing cleaning steps:
+
+			# Updating phone number format:
+			if node.get("phone"):
+				node["phone"] = update_phone(node["phone"])
+
+			if node.get("contact:phone") and not node.get("phone"):
+				node["phone"] = update_phone(node["contact:phone"])
+
+			# Turning shops into amenities (cf. update_functions.py for details):
+			if node.get("shop"):
+				node = update_shop(node)
+
 		element.clear() # for better memory usage
 		# See: https://eli.thegreenplace.net/2012/03/15/processing-xml-in-python-with-elementtree
 		return node
@@ -119,7 +132,13 @@ def process_map(file_in, pretty = False):
 				else:
 					fo.write(json.dumps(el) + "\n")
 
-osm_file = "berlin_medium.osm"
+osm_file = "../data/raw-data/berlin_medium.osm"
 process_map(osm_file, False)
+
+
+
+
+
+
 
 
