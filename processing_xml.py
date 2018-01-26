@@ -3,7 +3,7 @@
 
 """
 Here, the XML first is processed programmatically. Each line is read in via a sax-parser (xml.etree.cElementTree). 
-Elements are added according to the schema provided (see example below). Several cleaning steps are performed programmatically.
+Elements are added according to the schema provided (see example below). Cleaning steps are performed programmatically.
 Finally, the cleaned content is written out in a json file (later to be added to a MongoDB instance).
 
 {
@@ -40,10 +40,16 @@ from update_functions import *
 
 CREATED = ["version", "changeset", "timestamp", "user", "uid"]
 lower = re.compile(r'^([a-z]|_)*$')
-lower_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*$')
 problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
 
 def shape_element(element):
+
+	"""
+	Iterates through .xml file. Reshapes fields according to chosen schema.
+	Performs programmatic auditing and cleaning. Converts and writes out file to 
+	.json format.
+	"""
+
 	node = {}
 	# Processing only "node" or "way" tags:
 	if element.tag == "node" or element.tag == "way":
@@ -107,6 +113,7 @@ def shape_element(element):
 			if node.get("phone"):
 				node["phone"] = update_phone(node["phone"])
 
+			# Turns field "contact:phone" into "phone" and updates if field "phone" does not exist:
 			if node.get("contact:phone") and not node.get("phone"):
 				node["phone"] = update_phone(node["contact:phone"])
 
@@ -132,7 +139,10 @@ def process_map(file_in, pretty = False):
 				else:
 					fo.write(json.dumps(el) + "\n")
 
-osm_file = "../data/berlin_germany.osm"
-process_map(osm_file, False)
+osm_file = ""
+# local path to osm_file needs to be specified above
+
+if __name__ == '__main__':
+	process_map(osm_file, False)
 
 

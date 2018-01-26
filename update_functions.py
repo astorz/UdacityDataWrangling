@@ -9,7 +9,8 @@ import re
 
 def update_phone(phone):
 	"""
-	Explain functionality!!!
+	Attempts to correct phone number to chosen format.
+	If unable, returns original input.
 	"""
 
 	orig = phone
@@ -115,6 +116,10 @@ MAPPING = {'alcohol': 'liquor_store',
 
 
 def update_shop(node):
+
+	"""
+	Turns all shops into amenities. Updates value if necessary based on mapping.
+	"""
 	
 	if node["shop"] in IGNORE:
 		node.pop("shop")
