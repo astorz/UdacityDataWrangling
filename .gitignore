@@ -3,5 +3,4 @@ create-osm-sample.py
 /mongodb
 /analysis
 /__pycache__
-.gitignore
 .DS_Store
