@@ -8,6 +8,10 @@ import pprint
 import re
 
 def update_phone(phone):
+	"""
+	Explain functionality!!!
+	"""
+
 	orig = phone
 
 	# Splitting string into multiple phone numbers on either ";" or ","

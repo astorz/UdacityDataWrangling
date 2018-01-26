@@ -132,13 +132,7 @@ def process_map(file_in, pretty = False):
 				else:
 					fo.write(json.dumps(el) + "\n")
 
-osm_file = "../data/raw-data/berlin_medium.osm"
+osm_file = "../data/berlin_germany.osm"
 process_map(osm_file, False)
-
-
-
-
-
-
 
 
